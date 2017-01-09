@@ -1,0 +1,51 @@
+imports:
+    - { resource: parameters.yml }
+
+services:
+#    poke.example:
+#        class: Quetzacoalt\PokeBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
+
+    guzzle.client:
+        class: GuzzleHttp\Client
+        
+    doctrine.cache.provider:
+        class: Doctrine\Common\Cache\FilesystemCache
+        arguments:
+            - "%kernel.cache_dir%/doctrine"
+
+    guzzle.cache:
+        class: Csa\Bundle\GuzzleBundle\GuzzleHttp\Cache\DoctrineAdapter
+        arguments:
+            - "@doctrine.cache.provider"
+            - "%api_ttl%"
+        shared: false
+
+    poke.api.client:
+        class: Quetzacoalt\PokeBundle\Api\ApiClient
+        arguments:
+            - "@guzzle.client"
+            - "%kernel.cache_dir%"
+            - "%api_domain_pokemon%"
+            - "@poke.api.translator"
+            
+    poke.api.translator:
+        class: Quetzacoalt\PokeBundle\Api\ApiToTranslator
+        arguments:
+            - "@translator"
+            
+    poke.category.loader:
+        class: Quetzacoalt\PokeBundle\Api\PokemonTypesLoader
+        arguments:
+            - "@poke.api.client"
+            
+    poke.repository.category:
+        class: Quetzacoalt\PokeBundle\Repository\CategoryRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - "QuetzacoaltPokeBundle:Category"
+            
+    poke.updater.category:
+        class: Quetzacoalt\PokeBundle\DataUpdater\CategoryUpdater
+        arguments: 
+            entityManager: "@doctrine.orm.entity_manager"

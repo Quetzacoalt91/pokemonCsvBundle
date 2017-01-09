@@ -1,0 +1,4 @@
+parameters:
+    api_domain_pokemon: "http://pokeapi.co/api/v2/"
+    api_domain_image_search: "https://api.cognitive.microsoft.com/bing/v5.0/images/search"
+    api_ttl: 0
