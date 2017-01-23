@@ -5,9 +5,6 @@ services:
 #    poke.example:
 #        class: Quetzacoalt\PokeBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
-
-    guzzle.client:
-        class: GuzzleHttp\Client
         
     doctrine.cache.provider:
         class: Doctrine\Common\Cache\FilesystemCache
@@ -24,10 +21,14 @@ services:
     poke.api.client:
         class: Quetzacoalt\PokeBundle\Api\ApiClient
         arguments:
-            - "@guzzle.client"
-            - "%kernel.cache_dir%"
-            - "%api_domain_pokemon%"
+            - "@csa_guzzle.client.pokemon_api"
             - "@poke.api.translator"
+            
+    poke.api.image.bing:
+        class: Quetzacoalt\PokeBundle\Api\Images\BingImageLoader
+        arguments:
+            - "@csa_guzzle.client.bing_image_api"
+            - "%ms_cs_api_key%"
             
     poke.api.translator:
         class: Quetzacoalt\PokeBundle\Api\ApiToTranslator
@@ -38,6 +39,7 @@ services:
         class: Quetzacoalt\PokeBundle\Api\PokemonTypesLoader
         arguments:
             - "@poke.api.client"
+            - "@poke.api.image.bing"
             
     poke.repository.category:
         class: Quetzacoalt\PokeBundle\Repository\CategoryRepository

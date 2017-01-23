@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 namespace Quetzacoalt\PokeBundle\Api;
 
 use GuzzleHttp\Client;
@@ -18,12 +12,10 @@ class ApiClient {
     private $filesystem;
     private $apiToTranslator;
     
-    public function __construct(Client $client, $cacheDir, $domain, ApiToTranslator $apiToTranslator)
+    public function __construct(Client $client, ApiToTranslator $apiToTranslator)
     {
         $this->client = $client;
-        $this->domain = $domain;
         $this->filesystem = new Filesystem;
-        $this->cacheDir = $cacheDir.'/api/';
         $this->apiToTranslator = $apiToTranslator;
     }
     
@@ -56,28 +48,16 @@ class ApiClient {
     
     public function call($path)
     {
-        $filename = $this->getCacheFilePath($path);
-        if ($this->filesystem->exists($filename)) {
-            return json_decode(file_get_contents($filename));
-        }
-        
-        $response = $this->client->get($this->domain.$path)->getBody();
-
-        $this->filesystem->dumpFile($filename, $response);
+        $response = $this->client->get($path)->getBody();
         return json_decode($response);
-    }
-    
-    private function getCacheFilePath($path)
-    {
-        return rtrim($this->cacheDir.$path, '/').'.json';
     }
     
     private function retrieveFromUrl($url)
     {
-        if (false === strpos($url, $this->domain)) {
+        if (false === strpos($url, (string)$this->client->getConfig('base_uri'))) {
             throw new \Exception("Potential security issue by requesting external URL ". $url);
         }
-        $path = str_replace($this->domain, '', $url);
+        $path = str_replace((string)$this->client->getConfig('getConfig'), '', $url);
         return $this->retrieve($path);
     }
 }

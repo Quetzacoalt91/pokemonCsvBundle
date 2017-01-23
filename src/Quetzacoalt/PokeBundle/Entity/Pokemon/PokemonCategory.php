@@ -32,7 +32,7 @@ class PokemonCategory extends CategorySource
         $this->metaKeywords = $name.(isset($data->move_damage_class->name)?', '.$data->move_damage_class->name:'');
         $this->metaDescription = '';
         $this->rewrittenURL = $name;
-        $this->imageURL = '';
+        $this->imageURL = $data->images;
     }
     
     public function getActive() {

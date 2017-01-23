@@ -21,12 +21,6 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('quetzacoalt_poke');
         $rootNode
             ->children()
-                ->scalarNode('api_domain_pokemon')
-                    ->defaultNull()
-                ->end()
-                ->scalarNode('api_domain_image_search')
-                    ->defaultNull()
-                ->end()
             ->end();
 
         // Here you should define the parameters that are allowed to
