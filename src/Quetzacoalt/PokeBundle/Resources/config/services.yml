@@ -41,6 +41,11 @@ services:
             - "@poke.api.client"
             - "@poke.api.image.bing"
             
+    poke.csv.writer:
+        class: Quetzacoalt\PokeBundle\CSV\ToCsvConverter
+        arguments:
+            - "%kernel.cache_dir%/exportedCsv/"
+            
     poke.repository.category:
         class: Quetzacoalt\PokeBundle\Repository\CategoryRepository
         factory: ["@doctrine", getRepository]

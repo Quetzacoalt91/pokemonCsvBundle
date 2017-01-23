@@ -5,7 +5,7 @@ namespace Quetzacoalt\PokeBundle\Entity;
 use Quetzacoalt\PokeBundle\Entity\Source\CategorySource;
 
 class Category {
-    public $id;
+    protected $id;
     public $ps_id;
     public $active;
     public $name;

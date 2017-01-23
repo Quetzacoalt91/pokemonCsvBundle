@@ -66,6 +66,8 @@ class BingImageLoader implements ApiImageInterface
         
         foreach ($results->value as $result) {
             try {
+                // We need this part to know the image location after
+                // redirection from Bing service
                 $this->client->get($result->contentUrl, array(
                     'allow_redirects' => array(
                         'on_redirect' => $funcToCall,

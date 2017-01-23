@@ -34,8 +34,9 @@ class PokemonTypesLoader implements ApiLoaderInterface {
     {
         $types = array();
         foreach ($this->apiClient->retrieve($this->path) as $data) {
-            $data->images = implode(',', $this->apiImageClient->search(
-                            $data->name, array('max_results' => 1)));
+            $data->images = $this->apiImageClient->search(
+                            $data->name, array('max_results' => 1));
+            
             $types[] = (new PokemonCategory($data->id, $data));
         }
         return $types;

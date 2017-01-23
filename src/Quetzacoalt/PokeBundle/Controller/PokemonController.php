@@ -16,9 +16,10 @@ class PokemonController extends Controller
         $categoryManager = $this->get('poke.updater.category');
         $categoryManager->addFromSources($categoryLoader->load());
         $categoryRepository = $this->get('poke.repository.category');
-        dump($categoryRepository->findAll());
+        $categories = $categoryRepository->findAll();
+        dump($categories);
         dump($this->get('translator')->trans('flying', array(), 'pokemon'));
-        dump($this->get('poke.api.image.bing')->search('doge'));
+        $this->get('poke.csv.writer')->export($categories);
         return $this->render('QuetzacoaltPokeBundle:Default:index.html.twig');
     }
     
