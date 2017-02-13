@@ -3,9 +3,9 @@
 
 namespace Quetzacoalt\PokeBundle\Entity\Pokemon;
 
-use Quetzacoalt\PokeBundle\Entity\Source\CategorySource;
+use Quetzacoalt\PokeBundle\Entity\Category;
 
-class PokemonCategory extends CategorySource
+class PokemonCategory extends Category
 {
     // Documentation https://pokeapi.co/docsv2/#types
     
