@@ -26,6 +26,9 @@ class ApiToTranslator
     
     protected function add($data, $domain)
     {
+        if (!isset($data->names)) {
+            return;
+        }
         foreach ($data->names as $translatedData) {
             $locale = $translatedData->language->name;
             

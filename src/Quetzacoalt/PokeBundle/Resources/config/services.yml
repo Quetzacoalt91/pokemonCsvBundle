@@ -35,8 +35,14 @@ services:
         arguments:
             - "@translator"
             
-    poke.category.loader:
+    poke.loader.category:
         class: Quetzacoalt\PokeBundle\Api\PokemonTypesLoader
+        arguments:
+            - "@poke.api.client"
+            - "@poke.api.image.bing"
+            
+    poke.loader.product:
+        class: Quetzacoalt\PokeBundle\Api\PokemonLoader
         arguments:
             - "@poke.api.client"
             - "@poke.api.image.bing"
@@ -52,7 +58,18 @@ services:
         arguments:
             - "QuetzacoaltPokeBundle:Category"
             
+    poke.repository.product:
+        class: Quetzacoalt\PokeBundle\Repository\ProductRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - "QuetzacoaltPokeBundle:Product"
+            
     poke.updater.category:
         class: Quetzacoalt\PokeBundle\DataUpdater\CategoryUpdater
+        arguments: 
+            entityManager: "@doctrine.orm.entity_manager"
+            
+    poke.updater.product:
+        class: Quetzacoalt\PokeBundle\DataUpdater\ProductUpdater
         arguments: 
             entityManager: "@doctrine.orm.entity_manager"

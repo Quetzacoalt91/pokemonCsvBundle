@@ -9,7 +9,7 @@ class PokemonCategory extends Category
 {
     // Documentation https://pokeapi.co/docsv2/#types
     
-    public function __construct($id, \stdClass $data)
+    public function __construct($id, $data)
     {
         $name = $data->name;
         $this->ps_id = $id;

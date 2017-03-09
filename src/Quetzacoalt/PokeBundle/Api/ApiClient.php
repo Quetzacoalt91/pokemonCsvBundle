@@ -7,8 +7,6 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ApiClient {
     private $client;
-    private $cacheDir;
-    private $domain;
     private $filesystem;
     private $apiToTranslator;
     
@@ -21,24 +19,16 @@ class ApiClient {
     
     public function retrieve($path)
     {
-        $response = $this->call($path);
-         
-        $results = !empty($response->results)?
-                $response->results:
-                $response;
+        $response = $this->retrieveFromUrl($path);
+        if (!empty($response->results)) {
+                $results = array_map(function($item) {return new ApiResult($item);}, $response->results);
+        } else {
+                $results = new ApiResult($response);
+        }
         
         // Handle pagination
         if (!empty($response->next)) {
-            $results = (object)array_merge((array)$results, (array)$this->retrieve($response->next));
-        }
-        
-        if (!empty($response->count)) {
-            // Load details
-            foreach ($results as $key => $result) {
-                if (!empty($result->url)) {
-                    $results[$key] = (object)array_merge((array)$result, (array)$this->retrieveFromUrl($result->url));
-                }
-            }
+            $results = array_merge((array)$results, (array)$this->retrieve($response->next));
         }
         
         $this->apiToTranslator->addToTranslator($results);
@@ -54,10 +44,14 @@ class ApiClient {
     
     private function retrieveFromUrl($url)
     {
-        if (false === strpos($url, (string)$this->client->getConfig('base_uri'))) {
+        if (filter_var($url, FILTER_VALIDATE_URL) && false === strpos($url, (string)$this->client->getConfig('base_uri'))) {
             throw new \Exception("Potential security issue by requesting external URL ". $url);
         }
         $path = str_replace((string)$this->client->getConfig('getConfig'), '', $url);
-        return $this->retrieve($path);
+        
+        $response = $this->call($path);
+
+      
+        return $response;
     }
 }

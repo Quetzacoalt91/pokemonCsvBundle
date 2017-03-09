@@ -12,7 +12,7 @@ class PokemonController extends Controller
         /**
          * @var \Quetzacoalt\PokeBundle\Api\PokemonTypesLoader
          */
-        $categoryLoader = $this->get('poke.category.loader');
+        /*$categoryLoader = $this->get('poke.loader.category');
         $categoryManager = $this->get('poke.updater.category');
         
         // Get from API and load in datbase
@@ -22,10 +22,23 @@ class PokemonController extends Controller
         // Dump to check
         $categories = $categoryRepository->findAll();
         dump($categories);
-        dump($this->get('translator')->trans('flying', array(), 'pokemon'));
+        dump($this->get('translator')->trans('flying', array(), 'pokemon'));*/
+        
+        $productLoader = $this->get('poke.loader.product');
+        $productManager = $this->get('poke.updater.product');
+        
+        // Get from API and load in datbase
+        $productManager->addFromSources($productLoader->load());
+        $productRepository = $this->get('poke.repository.category');
+        
+        // Dump to check
+        $pokemons = $productRepository->findAll();
+        dump($pokemons);
         
         // CSV export of categories
-        $this->get('poke.csv.writer')->export($categories);
+        $writer = $this->get('poke.csv.writer');
+        //$writer->export($categories);
+        $writer->export($pokemons);
         return $this->render('QuetzacoaltPokeBundle:Default:index.html.twig');
     }
     

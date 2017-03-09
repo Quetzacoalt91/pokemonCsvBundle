@@ -4,13 +4,6 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/tNabord/Documents/github/pokemondata/src/Quetzacoalt/PokeBundle/Api/ApiClient.php</file>
-            <file>file:/Users/tNabord/Documents/github/pokemondata/src/Quetzacoalt/PokeBundle/Resources/config/services.yml</file>
-            <file>file:/Users/tNabord/Documents/github/pokemondata/app/config/config.yml</file>
-            <file>file:/Users/tNabord/Documents/github/pokemondata/src/Quetzacoalt/PokeBundle/Api/ApiToTranslator.php</file>
-            <file>file:/Users/tNabord/Documents/github/pokemondata/src/Quetzacoalt/PokeBundle/Controller/PokemonController.php</file>
-            <file>file:/Users/tNabord/Documents/github/pokemondata/src/Quetzacoalt/PokeBundle/Api/PokemonTypesLoader.php</file>
-            <file>file:/Users/tNabord/Documents/github/pokemondata/composer.json</file>
-            <file>file:/Users/tNabord/Documents/github/pokemondata/src/Quetzacoalt/PokeBundle/Api/Images/BingImageLoader.php</file>
         </group>
     </open-files>
 </project-private>
