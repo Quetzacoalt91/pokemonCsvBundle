@@ -2,18 +2,12 @@ poke_homepage:
     path:     /
     defaults: { _controller: QuetzacoaltPokeBundle:Default:index }
 
-poke_see_pokemon:
-    path: /pokemon
+poke_fetch_data:
+    path: /pokemon/{type}
     defaults:
         _controller: QuetzacoaltPokeBundle:Pokemon:index
-
-poke_generate_pokemon:
-    path: /pokemon
-    methods: POST
-    defaults:
-        _controller: QuetzacoaltPokeBundle:Pokemon:update
         
 poke_dl_pokemon:
-    path: /pokemon/download
+    path: /pokemon/{type}/download
     defaults:
         _controller: QuetzacoaltPokeBundle:Pokemon:download

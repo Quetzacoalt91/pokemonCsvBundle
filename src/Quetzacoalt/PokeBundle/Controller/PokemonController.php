@@ -3,56 +3,40 @@
 namespace Quetzacoalt\PokeBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PokemonController extends Controller
 {
-    public function indexAction()
+    public function indexAction(Request $request)
     {
+        $type = $request->query->get('type');
+
         /**
-         * @var \Quetzacoalt\PokeBundle\Api\PokemonTypesLoader
+         * @var \Quetzacoalt\PokeBundle\Api\ApiLoaderInterface
          */
-        /*$categoryLoader = $this->get('poke.loader.category');
-        $categoryManager = $this->get('poke.updater.category');
+        $entityLoader = $this->get('poke.loader.'.$type);
+        $entityManager = $this->get('poke.updater.'.$type);
         
         // Get from API and load in datbase
-        $categoryManager->addFromSources($categoryLoader->load());
-        $categoryRepository = $this->get('poke.repository.category');
+        $entityManager->addFromSources($entityLoader->load());
+        $entityRepository = $this->get('poke.repository.'.$type);
         
         // Dump to check
-        $categories = $categoryRepository->findAll();
-        dump($categories);
-        dump($this->get('translator')->trans('flying', array(), 'pokemon'));*/
-        
-        $productLoader = $this->get('poke.loader.product');
-        $productManager = $this->get('poke.updater.product');
-        
-        // Get from API and load in datbase
-        $productManager->addFromSources($productLoader->load());
-        $productRepository = $this->get('poke.repository.category');
-        
-        // Dump to check
-        $pokemons = $productRepository->findAll();
-        dump($pokemons);
-        
+        $entities = $entityRepository->findAll();
         // CSV export of categories
         $writer = $this->get('poke.csv.writer');
-        //$writer->export($categories);
-        $writer->export($pokemons);
+        $writer->export($entities);
         return $this->render('QuetzacoaltPokeBundle:Default:index.html.twig');
     }
     
     public function downloadAction()
     {
-        $categoryRepository = $this->get('poke.repository.category');
-        $response = new Response($categoryRepository->findAll());
+        $type = $request->query->get('type');
+        $entityRepository = $this->get('poke.repository.'.$type);
+        $response = new Response($entityRepository->findAll());
         $response->headers->set('Content-Type', 'application/octet-stream');
         $response->headers->set('Content-Disposition', 'attachment; filename=filename.csv');
         return $response;
-    }
-    
-    public function updateAction()
-    {
-        return $this->redirectToRoute('poke_see_pokemon');
     }
 }
