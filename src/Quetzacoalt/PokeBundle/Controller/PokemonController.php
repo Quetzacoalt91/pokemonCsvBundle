@@ -3,15 +3,12 @@
 namespace Quetzacoalt\PokeBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class PokemonController extends Controller
 {
-    public function indexAction(Request $request)
+    public function indexAction($type)
     {
-        $type = $request->query->get('type');
-
         /**
          * @var \Quetzacoalt\PokeBundle\Api\ApiLoaderInterface
          */
@@ -27,12 +24,18 @@ class PokemonController extends Controller
         // CSV export of categories
         $writer = $this->get('poke.csv.writer');
         $writer->export($entities);
-        return $this->render('QuetzacoaltPokeBundle:Default:index.html.twig');
+        return $this->render(
+            'QuetzacoaltPokeBundle:Default:list.html.twig',
+            array(
+                'type' => $type,
+                'entities' => $entities,
+                'downloadLink' => $this->generateUrl('poke_dl_pokemon', array('type' => $type)),
+            )
+        );
     }
     
-    public function downloadAction()
+    public function downloadAction($type)
     {
-        $type = $request->query->get('type');
         $entityRepository = $this->get('poke.repository.'.$type);
         $response = new Response($entityRepository->findAll());
         $response->headers->set('Content-Type', 'application/octet-stream');
